@@ -31,13 +31,13 @@ workdir = r"C:\Users\User\Desktop\Freelancer"
 outfile = "google_scholar_exports_test.csv"
 
 # REQUIRED: ENTER THE URL OF YOUR FIRST PAGE OF GOOGLE SCHOLAR HERE
-start_url = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C48&as_ylo=2020&q=hotel+review+analysis+BERT&btnG="
+start_url = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C48&as_ylo=2020&q=machine+learning&btnG=&oq=machine+le"
 # start_url = "https://scholar.google.com/scholar?hl=en&q=%22geogames%22+%22virtual+reality%22&btnG=&as_sdt=1%2C48&as_sdtp="
 
 # IMPORTANT: Enter the maximum number of records you want to extract
 # If you know how many results this search returns, enter that number or higher
 # This ensures that the program doesn't loop infinitely
-max_records = 100
+max_records = 25
 
 # The URL request function also passes in headers
 # Advanced users can change these:
@@ -112,7 +112,8 @@ def safe_str_bs4(in_soup=""):
 current_url = start_url
 # Cookies for the URL request
 #chromecookies = os.path.join(os.path.expandvars("%userprofile%"),"AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cookies")
-#cj = browser_cookie3.Firefox()
+# cj = browser_cookie3.chrome()
+cj = cookies = {'enwiki_session': '17ab96bd8ffbe8ca58a78657a918558'}
 # The current page number
 page_num = 0
 # This variable determines when the page-reading loop will end
@@ -130,7 +131,7 @@ while end_of_pages == False:
     # Open the page and extract text, or else end the loop
     try:
         # Requests the URL and opens the page
-        myreq = requests.get(current_url, headers=hdr)
+        myreq = requests.get(current_url, headers=hdr, cookies=cj)
         # Extracts the HTML as a string
         print("Opened page #%s: %s" % (str(page_num), current_url))
         page_html = myreq.text
@@ -187,6 +188,7 @@ while end_of_pages == False:
         result_journal_year = ''
         result_journal_site = ''
         result_journal = ''
+        result_year = ''
         result_author = ''
         if authors_journal_year_text != '':
             # General format for this line of text:
@@ -255,10 +257,11 @@ while end_of_pages == False:
         # Create a dict storing all of the results for this page  
         # If you want to change these, remember to change the list at the bottom as well
         together_dict = {'title': result_title,
-                         'authors': result_authors,
-                         'journal': result_journal,
+                         'authors': result_journal,
+                         # 'authors': result_authors,
+                         # 'journal': result_journal,
                          'journal_website': result_journal_site,
-                         # 'year': result_year,
+                         'year': result_year,
                          'description': result_desc,
                          'link_1': result_links[0],
                          'link_2': result_links[1],
