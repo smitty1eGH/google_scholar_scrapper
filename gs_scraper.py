@@ -11,8 +11,7 @@
 #
 # Dependencies: numpy, pandas, requests, browser_cookie3, BeautifulSoup
 # Tested in Python 3 (but should be usable in 2.7 with minor changes)
-# Note 1: I'm planning to make this code more modular soon
-# Note 2: The "sleep" function at the end of the while loop needs 
+# Note : The "sleep" function at the end of the while loop needs
 #   to be refined (+ time?) to avoid Google Scholar blocking us
 ##############################################################
 
@@ -32,7 +31,6 @@ outfile = "google_scholar_exports_test.csv"
 
 # REQUIRED: ENTER THE URL OF YOUR FIRST PAGE OF GOOGLE SCHOLAR HERE
 start_url = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C48&as_ylo=2020&q=machine+learning&btnG=&oq=machine+le"
-# start_url = "https://scholar.google.com/scholar?hl=en&q=%22geogames%22+%22virtual+reality%22&btnG=&as_sdt=1%2C48&as_sdtp="
 
 # IMPORTANT: Enter the maximum number of records you want to extract
 # If you know how many results this search returns, enter that number or higher
@@ -257,8 +255,8 @@ while end_of_pages == False:
         # Create a dict storing all of the results for this page  
         # If you want to change these, remember to change the list at the bottom as well
         together_dict = {'title': result_title,
-                         'authors': result_journal,
-                         # 'authors': result_authors,
+                         # 'authors': result_journal,
+                         'authors': result_authors + "" + result_journal,
                          # 'journal': result_journal,
                          'journal_website': result_journal_site,
                          'year': result_year,
