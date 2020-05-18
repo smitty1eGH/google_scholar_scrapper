@@ -30,12 +30,12 @@ workdir = r"C:\Users\User\Desktop\Freelancer"
 outfile = "google_scholar_exports_test.csv"
 
 # REQUIRED: ENTER THE URL OF YOUR FIRST PAGE OF GOOGLE SCHOLAR HERE
-start_url = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C48&as_ylo=2020&q=machine+learning&btnG=&oq=machine+le"
+start_url = "https://scholar.google.com/scholar?as_ylo=2020&q=natural+language+processing&hl=en&as_sdt=0,5"
 
 # IMPORTANT: Enter the maximum number of records you want to extract
 # If you know how many results this search returns, enter that number or higher
 # This ensures that the program doesn't loop infinitely
-max_records = 25
+max_records = 5
 
 # The URL request function also passes in headers
 # Advanced users can change these:
@@ -151,6 +151,15 @@ while end_of_pages == False:
         print("##############################################")
         break
 
+    # Function to find String between 2 strings
+    def find_between(s, first, last):
+        try:
+            start = s.index(first) + len(first)
+            end = s.index(last, start)
+            return s[start:end]
+        except ValueError:
+            return ""
+
     ##############################################################
     # V. Iterate through results, extracting info
     ##############################################################
@@ -160,10 +169,19 @@ while end_of_pages == False:
         # Separate the result HTML into titles, author + journal info, and descriptions
         title_html = result_soup.find("h3", class_="gs_rt")
         authors_journal_year_html = result_soup.find("div", class_="gs_a")
+        # print(authors_journal_year_html)
         desc_html = result_soup.find("div", class_="gs_rs")
         # Extract links on the side
         all_links = result_soup.find_all("div", class_="gs_ggsd")
+        # print(all_links)
+        # Extract citations
+        citations_html = result_soup.find_all("div", class_="gs_fl")
+        result_citations = ''
+        for one_a in citations_html:
+            a_text = one_a.get_text()
+            result_citations = a_text
 
+        result_citations = find_between( result_citations, "Cited by ", " Related" )
         # If the title also contains a link, append the link HTML to all_links
         # if title_html.find("a") is not None:
         #     all_links = all_links + [title_html]
@@ -171,12 +189,18 @@ while end_of_pages == False:
         # Extract text from the HTML data    
         # TITLE
         result_title = safe_str_bs4(title_html)
+        # CITATION
+        # result_citations = safe_str_bs4(citations_html)
+        # print(result_citations)
         # Remove any text in square brackets at the beginning of the title
         while re.search("^\[[a-z|A-Z]{1,12}\]", result_title) is not None:
             rm_index = result_title.index(']') + 1
             result_title = result_title[rm_index:]
         # Strip any remaining whitespace from the title
         result_title = result_title.lstrip()
+
+        # Strip any remaining whitespace from the citations
+        # result_citations = result_citations.lstrip()
 
         # AUTHORS, JOURNAL, YEAR
         authors_journal_year_text = safe_str_bs4(authors_journal_year_html)
@@ -259,6 +283,7 @@ while end_of_pages == False:
                          'authors': result_authors + "" + result_journal,
                          # 'journal': result_journal,
                          'journal_website': result_journal_site,
+                         'citations': result_citations,
                          'year': result_year,
                          'description': result_desc,
                          'link_1': result_links[0],
