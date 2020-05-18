@@ -30,7 +30,13 @@ workdir = r"C:\Users\User\Desktop\Freelancer"
 outfile = "google_scholar_exports_test.csv"
 
 # REQUIRED: ENTER THE URL OF YOUR FIRST PAGE OF GOOGLE SCHOLAR HERE
-start_url = "https://scholar.google.com/scholar?as_ylo=2020&q=natural+language+processing&hl=en&as_sdt=0,5"
+# Enter research topic
+topic = 'machine learning'
+topic = topic.lower()
+topic = topic.replace(' ', '+')
+# Enter year of research
+year = '2020'
+start_url = "https://scholar.google.com/scholar?as_ylo="+year+"&q="+topic+"&hl=en&as_sdt=0,5"
 
 # IMPORTANT: Enter the maximum number of records you want to extract
 # If you know how many results this search returns, enter that number or higher
@@ -276,11 +282,13 @@ while end_of_pages == False:
             # Will fill all missing values with empty strings up to result_links[3]
             result_links = result_links + ([''] * (4 - len(result_links)))
 
+        result_authors_new = result_authors + "" + result_journal
+        result_authors_new = result_authors_new.split('-')[0]
         # Create a dict storing all of the results for this page  
         # If you want to change these, remember to change the list at the bottom as well
         together_dict = {'title': result_title,
                          # 'authors': result_journal,
-                         'authors': result_authors + "" + result_journal,
+                         'authors': result_authors_new,
                          # 'journal': result_journal,
                          'journal_website': result_journal_site,
                          'citations': result_citations,
