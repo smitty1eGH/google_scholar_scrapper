@@ -24,7 +24,7 @@
 # MAKE SURE THE r REMAINS IN FRONT OF THE STRING, eg. r'C:\path\to\my_directory\"
 import os
 
-#workdir = r"C:\Users\User\Desktop\Freelancer"
+# workdir = r"C:\Users\User\Desktop\Freelancer"
 workdir = "./workdir"
 
 # REQUIRED: ENTER THE NAME OF THE FILE YOU WANT TO WRITE TO, WITH A CSV EXTENSION

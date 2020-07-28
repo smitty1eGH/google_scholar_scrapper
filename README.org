@@ -1,0 +1,6 @@
+* Google Scholar Scraper
+
+Goals:
+
+# Store parsed results in SQLite DB
+# Batch- and menu-driven
